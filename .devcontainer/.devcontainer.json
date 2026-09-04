@@ -1,0 +1,14 @@
+{
+    "image": "mcr.microsoft.com/devcontainers/base:ubuntu",
+    // "dockerComposeFile": [
+	// 	"../docker-compose.yml"
+	// ],
+    "features": {
+        "ghcr.io/robsyme/features/nextflow:1": {},
+        "ghcr.io/robsyme/features/nf-test:1": {},
+        "ghcr.io/devcontainers/features/docker-in-docker:2": {}
+    },
+    "mounts": [
+        "source=/lustre,target=/lustre,type=bind,consistency=cached"
+      ]
+}

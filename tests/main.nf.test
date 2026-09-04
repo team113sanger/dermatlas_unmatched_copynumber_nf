@@ -1,0 +1,94 @@
+nextflow_pipeline {
+
+    name "Test Workflow main.nf"
+    script "main.nf"
+
+    // Every test here is a stub run. The real steps need a pooled normal reference and a
+    // whole-exome BAM to say anything at all, neither of which fits in a test fixture, so
+    // what is checked is the shape of the run: which samples reach which step, and how
+    // many times each step is scheduled.
+
+    test("Should analyse every subcohort in both arms") {
+
+        options "-stub"
+
+        when {
+            params {
+                load("$baseDir/tests/testdata/test_params.json")
+            }
+        }
+
+        then {
+            assert workflow.success
+            // Two tumours in the sample universe; the normal PD57536b is not one of them.
+            assert workflow.trace.tasks().findAll { it.name.contains("CNVKIT_RECALL") }.size() == 2
+            // Three purities in the table, one plot each.
+            assert workflow.trace.tasks().findAll { it.name.contains("PRELIMINARY_PENETRANCE_PLOT") }.size() == 3
+            // Two subcohorts, each in a filtered and an unfiltered arm.
+            assert workflow.trace.tasks().findAll { it.name.contains("FILTER_SEGMENTS") }.size() == 4
+            assert workflow.trace.tasks().findAll { it.name.contains("RUN_GISTIC2") }.size() == 4
+            // One plot per arm, on top of the three-purity sweep.
+            assert workflow.trace.tasks().findAll { it.name.contains("ANALYSE_SUBCOHORT:PENETRANCE_PLOT") }.size() == 4
+        }
+
+    }
+
+    test("Should not call samples named in exclude_samples") {
+
+        options "-stub"
+
+        when {
+            params {
+                load("$baseDir/tests/testdata/test_params.json")
+                exclude_samples = "$baseDir/tests/testdata/one_tumour_per_patient.txt"
+            }
+        }
+
+        then {
+            assert workflow.success
+            // PD57536a is excluded, leaving PD57537a as the only tumour to re-call.
+            assert workflow.trace.tasks().findAll { it.name.contains("CNVKIT_RECALL") }.size() == 1
+        }
+
+    }
+
+    test("Should fail when no pooled reference is given") {
+
+        options "-stub"
+
+        when {
+            params {
+                load("$baseDir/tests/testdata/test_params.json")
+                male_reference = null
+                female_reference = null
+            }
+        }
+
+        then {
+            assert workflow.failed
+            assert workflow.stdout.any { line -> line.contains("-entry BUILD_REFERENCE") }
+        }
+
+    }
+
+    test("Should build a pooled reference from the cohort's normals") {
+
+        options "-stub -entry BUILD_REFERENCE"
+
+        when {
+            params {
+                load("$baseDir/tests/testdata/test_params.json")
+            }
+        }
+
+        then {
+            assert workflow.success
+            // No sample universe is applied here, so the normal is staged alongside the
+            // tumours: it is the only sample the reference is actually built from.
+            assert workflow.trace.tasks().findAll { it.name.contains("CNVKIT_STATIC_FILES") }.size() == 1
+            assert workflow.trace.tasks().findAll { it.name.contains("CNVKIT_POOLED_REFERENCE") }.size() == 1
+        }
+
+    }
+
+}

@@ -1,0 +1,29 @@
+{
+    "bam_path": "${baseDir}/tests/testdata/**bam{,.bai}",
+    "metadata_manifest": "${baseDir}/tests/testdata/metadata_manifest.tsv",
+    "all_samples": "${baseDir}/tests/testdata/analysed_all_tum.txt",
+    "study_id": "test_study",
+    "cohort_prefix": "test_cohort",
+    "subcohorts": {
+        "all_tumours": {
+            "sample_list": "${baseDir}/tests/testdata/analysed_all_tum.txt"
+        },
+        "one_tumour_per_patient": {
+            "sample_list": "${baseDir}/tests/testdata/one_tumour_per_patient.txt"
+        }
+    },
+    "reference_genome": "${baseDir}/tests/testdata/genome.fa",
+    "reference_genome_index": "${baseDir}/tests/testdata/genome.fa.fai",
+    "baitset_bed": "${baseDir}/tests/testdata/baitset.bed",
+    "refflat_file": "${baseDir}/tests/testdata/refFlat.txt",
+    "sv_blacklist": "${baseDir}/tests/testdata/sv_blacklist.bed",
+    "access_bed": "${baseDir}/tests/testdata/access.bed",
+    "targets_bed": "${baseDir}/tests/testdata/baitset.target.bed",
+    "antitargets_bed": "${baseDir}/tests/testdata/baitset.antitarget.bed",
+    "baitset_genes_file": "${baseDir}/tests/testdata/baitset.baitset_genes.txt",
+    "male_reference": "${baseDir}/tests/testdata/male.reference.cnn",
+    "female_reference": "${baseDir}/tests/testdata/female.reference.cnn",
+    "purity_log2_table": "${baseDir}/tests/testdata/purity_vs_log2ratio.tsv",
+    "difficult_regions": "${baseDir}/tests/testdata/gistic2_difficult_regions.bed",
+    "gistic_refgene_file": "${baseDir}/tests/testdata/hg38.refgene.mat"
+}
