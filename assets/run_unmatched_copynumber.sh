@@ -637,7 +637,7 @@ _ENV_CLEANUP_WORK_DIR="${DERMATLAS_CLEANUP_WORK_DIR:-}"
 # Checked after sourcing source_me.sh; the last two only when their toggle is true.
 _PIPELINE_ENV_VARS=(PROJECT_DIR COMMANDS_DIR ANALYSIS_DIR BAMS_DIR STUDY PROJECT COHORT \
                 DNA_TUMOUR_LIST_ANALYSED_ALL DNA_TUMOUR_LIST_ONE_TUMOUR_PER_PATIENT_ALL \
-                COHORT_METADATA_FILE)
+                DNA_TUMOUR_LIST_RELATED_TUMOURS_ALL COHORT_METADATA_FILE)
 _WEBSITE_ENV_VARS=(COHORT_SLUG SAMPLE_LIST_VERSION_FILE SELF_DESCRIBING_API)
 _SLACK_ENV_VARS=(SLACK_WEBHOOK_URL)
 PIPELINE_SLUG="${UNMATCHED_COPYNUMBER_PIPELINE_SLUG:-${_DEFAULT_PIPELINE_SLUG}}"
@@ -723,6 +723,7 @@ _TRAP_CAN_SLACK=1
 # export COHORT=""         # e.g. "PILAR_CYST"; completes the output file prefix (config: cohort_prefix)
 # export DNA_TUMOUR_LIST_ANALYSED_ALL=""                # e.g. "${PROJECT_DIR}/metadata/6937_3125-analysed_all_tum.txt"; the sample universe (config: all_samples) and a subcohort
 # export DNA_TUMOUR_LIST_ONE_TUMOUR_PER_PATIENT_ALL=""  # e.g. "${PROJECT_DIR}/metadata/6937_3125-one_tumour_per_patient_all_tum.txt"; a subcohort
+# export DNA_TUMOUR_LIST_RELATED_TUMOURS_ALL=""         # e.g. "${PROJECT_DIR}/metadata/6937_3125-related_tumours_all_tum.txt"; a subcohort, may be empty
 # export COHORT_METADATA_FILE=""   # e.g. "${PROJECT_DIR}/metadata/<cohort>_metadata.tsv"; sample id, sex and tumour/normal columns (config: metadata_manifest). Must be TSV, not .xlsx
 #
 # Website-essential (required only when DERMATLAS_WEBSITE_LOGGING="true"):

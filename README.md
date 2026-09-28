@@ -74,7 +74,8 @@ farm22 profile's default, so a standard Dermatlas cohort never runs `BUILD_REFER
 ```groovy
 subcohorts = [
     "all_tumours":            [ sample_list: "/path/to/6937_3125-analysed_all_tum.txt" ],
-    "one_tumour_per_patient": [ sample_list: "/path/to/6937_3125-one_tumour_per_patient_all_tum.txt" ]
+    "one_tumour_per_patient": [ sample_list: "/path/to/6937_3125-one_tumour_per_patient_all_tum.txt" ],
+    "related_tumours":        [ sample_list: "/path/to/6937_3125-related_tumours_all_tum.txt" ]
 ]
 ```
 
@@ -194,7 +195,8 @@ the first dot. See [Inputs](#cohort-dependent-variables) for why a looser glob s
 ├── metadata/
 │   ├── 6937_6938_METADATA_Pilar_cyst.tsv        # COHORT_METADATA_FILE; TSV, not .xlsx
 │   ├── 6937_3125-analysed_all_tum.txt           # DNA_TUMOUR_LIST_ANALYSED_ALL; the sample universe, and a subcohort
-│   └── 6937_3125-one_tumour_per_patient_all_tum.txt  # DNA_TUMOUR_LIST_ONE_TUMOUR_PER_PATIENT_ALL
+│   ├── 6937_3125-one_tumour_per_patient_all_tum.txt  # DNA_TUMOUR_LIST_ONE_TUMOUR_PER_PATIENT_ALL
+│   └── 6937_3125-related_tumours_all_tum.txt    # DNA_TUMOUR_LIST_RELATED_TUMOURS_ALL; may be empty
 ├── analysis/                                    # ANALYSIS_DIR; results land in analysis/unmatched_copy_number
 └── unmatched_copynumber_pipe/                   # created by the wrapper, not by you
     ├── .lock                                    # see Reclaiming disk space
@@ -210,7 +212,7 @@ one.
 <summary><strong>With a <code>source_me.sh</code></strong> - reusable across runs, and the shape the website generates</summary>
 
 1. Write `source_me.sh` beside the wrapper in `assets/`, which is where the wrapper looks by default. With
-   reporting opted out, these ten exports are the whole contract:
+   reporting opted out, these eleven exports are the whole contract:
 
    ```bash
    export PROJECT_DIR="/lustre/.../6937_3125_DERMATLAS_Pilar_cyst_WES"
@@ -222,6 +224,7 @@ one.
    export COHORT="PILAR_CYST"  # completes the output file prefix
    export DNA_TUMOUR_LIST_ANALYSED_ALL="${PROJECT_DIR}/metadata/6937_3125-analysed_all_tum.txt"
    export DNA_TUMOUR_LIST_ONE_TUMOUR_PER_PATIENT_ALL="${PROJECT_DIR}/metadata/6937_3125-one_tumour_per_patient_all_tum.txt"
+   export DNA_TUMOUR_LIST_RELATED_TUMOURS_ALL="${PROJECT_DIR}/metadata/6937_3125-related_tumours_all_tum.txt"  # may be empty
    export COHORT_METADATA_FILE="${PROJECT_DIR}/metadata/6937_6938_METADATA_Pilar_cyst.tsv"  # TSV, not .xlsx
    ```
 
@@ -247,7 +250,7 @@ To override a single value without regenerating the file, uncomment just that va
 1. Under **ENVIRONMENT SETUP**, set `SOURCE_ME="none"` so the wrapper skips sourcing anything.
 
 2. Under **MANUAL ENVIRONMENT OVERRIDES**, uncomment and fill in the pipeline-essential exports. With reporting
-   opted out, these ten are the whole contract:
+   opted out, these eleven are the whole contract:
 
    ```bash
    export PROJECT_DIR="/lustre/.../6937_3125_DERMATLAS_Pilar_cyst_WES"
@@ -259,6 +262,7 @@ To override a single value without regenerating the file, uncomment just that va
    export COHORT="PILAR_CYST"  # completes the output file prefix
    export DNA_TUMOUR_LIST_ANALYSED_ALL="${PROJECT_DIR}/metadata/6937_3125-analysed_all_tum.txt"
    export DNA_TUMOUR_LIST_ONE_TUMOUR_PER_PATIENT_ALL="${PROJECT_DIR}/metadata/6937_3125-one_tumour_per_patient_all_tum.txt"
+   export DNA_TUMOUR_LIST_RELATED_TUMOURS_ALL="${PROJECT_DIR}/metadata/6937_3125-related_tumours_all_tum.txt"  # may be empty
    export COHORT_METADATA_FILE="${PROJECT_DIR}/metadata/6937_6938_METADATA_Pilar_cyst.tsv"  # TSV, not .xlsx
    ```
 
