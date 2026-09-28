@@ -3,7 +3,7 @@
  *
  * Classes placed in lib/ are added to the Nextflow classpath automatically,
  * so these methods can be called from main.nf / nextflow.config without an
- * explicit import (e.g. `Utils.sendSlackSuccess(...)`).
+ * explicit import (e.g. `Utils.reportRun(workflow, params)`).
  */
 class Utils {
 
@@ -60,7 +60,7 @@ class Utils {
      * never changes the pipeline's exit status.
      *
      * Both reporting channels are explicit opt-ins, gated on environment
-     * variables exported by the run wrapper (assets/run_unmatched_copynumber.sh):
+     * variables exported by the pipeline's launcher (assets/run_<pipeline>.sh):
      *   DERMATLAS_SLACK_NOTIFICATIONS=true  - send a Slack message
      *   DERMATLAS_WEBSITE_LOGGING=true      - record the run in the Dermatlas
      *                                         analysis log via dermatlas-http
@@ -447,7 +447,7 @@ exec dermatlas-http cohort analysis-log "$@"
 
     /**
      * Extract the process name from workflow.errorReport.
-     * Matches: Error executing process > 'P45_RUN_RNASEQ_MANIFEST (tag)'
+     * Matches: Error executing process > 'MY_PROCESS (tag)'
      * @return process name string or null
      */
     private static String parseProcessName(String errorReport) {

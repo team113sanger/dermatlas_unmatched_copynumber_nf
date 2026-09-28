@@ -178,13 +178,13 @@ do by hand.
 Clone the repo and supply what the website otherwise provisions: a project directory, the pipeline's
 environment, and a couple of edits to the wrapper.
 
-Only `bams/` has a required shape: the config globs `${PROJECT_DIR}/bams/**bam{,.bai}` and pairs exactly two
-files per sample, so each sample needs its own sub-directory, and the sample id is the filename prefix before
+Only `bams/` has a required shape: the config globs `${BAMS_DIR}/**bam{,.bai}` and pairs exactly two files
+per sample, so each sample needs its own sub-directory, and the sample id is the filename prefix before
 the first dot. See [Inputs](#cohort-dependent-variables) for why a looser glob silently produces an empty run.
 
 ```
 <project_dir>/                                   # PROJECT_DIR
-├── bams/
+├── bams/                                        # BAMS_DIR
 │   ├── PD57536a/
 │   │   ├── PD57536a.sample.dupmarked.bam        # matched -> sample "PD57536a"
 │   │   ├── PD57536a.sample.dupmarked.bam.bai    # matched
@@ -192,9 +192,9 @@ the first dot. See [Inputs](#cohort-dependent-variables) for why a looser glob s
 │   │   └── PD57536a.sample.dupmarked.bam.met.gz # not matched by the glob
 │   └── PD57537a/ ...
 ├── metadata/
-│   ├── 6937_6938_METADATA_Pilar_cyst.tsv        # METADATA_FILE; TSV, not .xlsx
-│   ├── 6937_3125-analysed_all_tum.txt           # the sample universe, and a subcohort
-│   └── 6937_3125-one_tumour_per_patient_all_tum.txt
+│   ├── 6937_6938_METADATA_Pilar_cyst.tsv        # COHORT_METADATA_FILE; TSV, not .xlsx
+│   ├── 6937_3125-analysed_all_tum.txt           # DNA_TUMOUR_LIST_ANALYSED_ALL; the sample universe, and a subcohort
+│   └── 6937_3125-one_tumour_per_patient_all_tum.txt  # DNA_TUMOUR_LIST_ONE_TUMOUR_PER_PATIENT_ALL
 ├── analysis/                                    # ANALYSIS_DIR; results land in analysis/unmatched_copy_number
 └── unmatched_copynumber_pipe/                   # created by the wrapper, not by you
     ├── .lock                                    # see Reclaiming disk space
@@ -210,16 +210,19 @@ one.
 <summary><strong>With a <code>source_me.sh</code></strong> - reusable across runs, and the shape the website generates</summary>
 
 1. Write `source_me.sh` beside the wrapper in `assets/`, which is where the wrapper looks by default. With
-   reporting opted out, these seven exports are the whole contract:
+   reporting opted out, these ten exports are the whole contract:
 
    ```bash
    export PROJECT_DIR="/lustre/.../6937_3125_DERMATLAS_Pilar_cyst_WES"
    export COMMANDS_DIR="${PROJECT_DIR}/commands"
    export ANALYSIS_DIR="${PROJECT_DIR}/analysis"
+   export BAMS_DIR="${PROJECT_DIR}/bams"
    export STUDY="6937"       # part of the output file prefix, and of the run id
    export PROJECT="3125"     # part of the output file prefix, and of the run id
-   export COHORT="pilar-cyst"
-   export METADATA_FILE="6937_6938_METADATA_Pilar_cyst_v20250811.tsv"
+   export COHORT="PILAR_CYST"  # completes the output file prefix
+   export DNA_TUMOUR_LIST_ANALYSED_ALL="${PROJECT_DIR}/metadata/6937_3125-analysed_all_tum.txt"
+   export DNA_TUMOUR_LIST_ONE_TUMOUR_PER_PATIENT_ALL="${PROJECT_DIR}/metadata/6937_3125-one_tumour_per_patient_all_tum.txt"
+   export COHORT_METADATA_FILE="${PROJECT_DIR}/metadata/6937_6938_METADATA_Pilar_cyst.tsv"  # TSV, not .xlsx
    ```
 
 2. In the wrapper, under **OPT-IN REPORTING** set `DERMATLAS_WEBSITE_LOGGING` and
@@ -243,8 +246,21 @@ To override a single value without regenerating the file, uncomment just that va
 
 1. Under **ENVIRONMENT SETUP**, set `SOURCE_ME="none"` so the wrapper skips sourcing anything.
 
-2. Under **MANUAL ENVIRONMENT OVERRIDES**, uncomment and fill in the pipeline-essential exports - the same
-   seven as above.
+2. Under **MANUAL ENVIRONMENT OVERRIDES**, uncomment and fill in the pipeline-essential exports. With reporting
+   opted out, these ten are the whole contract:
+
+   ```bash
+   export PROJECT_DIR="/lustre/.../6937_3125_DERMATLAS_Pilar_cyst_WES"
+   export COMMANDS_DIR="${PROJECT_DIR}/commands"
+   export ANALYSIS_DIR="${PROJECT_DIR}/analysis"
+   export BAMS_DIR="${PROJECT_DIR}/bams"
+   export STUDY="6937"       # part of the output file prefix, and of the run id
+   export PROJECT="3125"     # part of the output file prefix, and of the run id
+   export COHORT="PILAR_CYST"  # completes the output file prefix
+   export DNA_TUMOUR_LIST_ANALYSED_ALL="${PROJECT_DIR}/metadata/6937_3125-analysed_all_tum.txt"
+   export DNA_TUMOUR_LIST_ONE_TUMOUR_PER_PATIENT_ALL="${PROJECT_DIR}/metadata/6937_3125-one_tumour_per_patient_all_tum.txt"
+   export COHORT_METADATA_FILE="${PROJECT_DIR}/metadata/6937_6938_METADATA_Pilar_cyst.tsv"  # TSV, not .xlsx
+   ```
 
 3. Under **OPT-IN REPORTING** set `DERMATLAS_WEBSITE_LOGGING` and `DERMATLAS_SLACK_NOTIFICATIONS` to
    `"false"`, and under **RUN CONFIGURATION** point `CONFIG` at your `unmatched_copynumber.config` and set
