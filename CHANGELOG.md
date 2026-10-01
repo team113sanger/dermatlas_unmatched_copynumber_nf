@@ -20,6 +20,13 @@ changelog entry to indicate the impact of the change:
 - **INTEGRATION** - a change to how the pipeline integrates with other systems
   or infrastructure, without changing its scientific processing or results.
 
+
+## [0.2.1]
+
+### Fixed
+- **INTEGRATION** Updated pipeline slug to correct call in run script. Changed to use independent lists instead of all within config
+
+
 ## [0.2.0]
 
 ### Added
