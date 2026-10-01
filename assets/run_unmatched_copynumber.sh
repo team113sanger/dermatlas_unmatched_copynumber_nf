@@ -625,7 +625,7 @@ trap 'exit 129' HUP
 ############################
 #### RESERVED VARIABLES ####
 ############################
-_DEFAULT_PIPELINE_SLUG="unmatched_copynumber_pipe"
+_DEFAULT_PIPELINE_SLUG="unmatched_copy_number_pipe"
 _DEFAULT_SOURCE_ME="./source_me.sh"
 # The environment module that puts dermatlas-http on PATH for the work-dir report.
 _DEFAULT_DERMATLAS_HTTP_MODULE="dermatlas-http"
@@ -758,7 +758,7 @@ fi
 ###########################
 
 # Nextflow config for this run; git-clone runs point this at their own copy.
-CONFIG="${COMMANDS_DIR}/${PIPELINE_SLUG}/unmatched_copynumber.config"
+CONFIG="${COMMANDS_DIR}/${PIPELINE_SLUG}/unmatched_copy_number.config"
 # Pipeline version to run: a tag or commit hash.
 REVISION="0.2.0"
 # Optional. If set, RUN_ID becomes <label>_<timestamp>.
