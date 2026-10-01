@@ -21,6 +21,12 @@ changelog entry to indicate the impact of the change:
   or infrastructure, without changing its scientific processing or results.
 
 
+
+## [0.2.3]
+
+### Fixed
+- **INTEGRATION** Updated env var for correct running independent tumours.
+
 ## [0.2.2]
 
 ### Fixed
