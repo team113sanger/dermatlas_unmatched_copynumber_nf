@@ -6,7 +6,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## Keywords
 
-As of version 0.2.0 the following *keywords* are used at the start of each
+As of version 0.1.2 the following *keywords* are used at the start of each
 changelog entry to indicate the impact of the change:
 
 - **REPRODUCIBILITY** - a change to the pipeline's scientific processing that
@@ -20,7 +20,7 @@ changelog entry to indicate the impact of the change:
 - **INTEGRATION** - a change to how the pipeline integrates with other systems
   or infrastructure, without changing its scientific processing or results.
 
-## [Unreleased]
+## [0.1.2]
 
 ### Added
 - **REPRODUCIBILITY** - a third subcohort, `related_tumours`, is analysed from the tumours
