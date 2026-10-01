@@ -758,9 +758,9 @@ fi
 ###########################
 
 # Nextflow config for this run; git-clone runs point this at their own copy.
-CONFIG="${COMMANDS_DIR}/${PIPELINE_SLUG}/unmatched_copy_number.config"
+CONFIG="${COMMANDS_DIR}/${PIPELINE_SLUG}/unmatched_copynumber.config"
 # Pipeline version to run: a tag or commit hash.
-REVISION="0.2.1"
+REVISION="0.2.2"
 # Optional. If set, RUN_ID becomes <label>_<timestamp>.
 LABEL=""
 

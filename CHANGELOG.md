@@ -21,6 +21,12 @@ changelog entry to indicate the impact of the change:
   or infrastructure, without changing its scientific processing or results.
 
 
+## [0.2.2]
+
+### Fixed
+- **INTEGRATION** Updated config name ug to correct call in run script.
+
+
 ## [0.2.1]
 
 ### Fixed
