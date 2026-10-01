@@ -20,7 +20,7 @@ changelog entry to indicate the impact of the change:
 - **INTEGRATION** - a change to how the pipeline integrates with other systems
   or infrastructure, without changing its scientific processing or results.
 
-## [Unreleased]
+## [0.2.0]
 
 ### Added
 - **REPRODUCIBILITY** - a third subcohort, `related_tumours`, is analysed from the tumours
