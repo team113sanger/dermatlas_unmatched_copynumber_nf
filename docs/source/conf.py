@@ -9,7 +9,7 @@
 project = 'dermatlas_unmatched_copynumber_nf'
 copyright = '2025-2026, Kim Wong, Jamie Billington'
 author = 'Kim Wong, Jamie Billington'
-release = '0.1.1'
+release = '0.1.2'
 
 # -- General configuration ---------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#general-configuration
