@@ -52,6 +52,36 @@ nextflow_pipeline {
 
     }
 
+    test("Should skip GISTIC2 for a subcohort left with no samples") {
+
+        options "-stub"
+
+        when {
+            params {
+                load("$baseDir/tests/testdata/test_params.json")
+                // A related_tumours-style subcohort whose only tumour is excluded.
+                subcohorts = [
+                    "all_tumours": [sample_list: "$baseDir/tests/testdata/analysed_all_tum.txt"],
+                    "related_tumours": [
+                        sample_list: "$baseDir/tests/testdata/one_tumour_per_patient.txt",
+                        exclude_list: "$baseDir/tests/testdata/analysed_all_tum.txt"
+                    ]
+                ]
+            }
+        }
+
+        then {
+            assert workflow.success
+            // Both subcohorts are filtered in both arms...
+            assert workflow.trace.tasks().findAll { it.name.contains("FILTER_SEGMENTS") }.size() == 4
+            // ...but only the one with samples left is scored and plotted.
+            assert workflow.trace.tasks().findAll { it.name.contains("RUN_GISTIC2") }.size() == 2
+            assert workflow.trace.tasks().findAll { it.name.contains("ANALYSE_SUBCOHORT:PENETRANCE_PLOT") }.size() == 2
+            assert (workflow.stdout + workflow.stderr).any { line -> line.contains("Skipping GISTIC2 and penetrance plot for subcohort 'related_tumours'") }
+        }
+
+    }
+
     test("Should fail when no pooled reference is given") {
 
         options "-stub"

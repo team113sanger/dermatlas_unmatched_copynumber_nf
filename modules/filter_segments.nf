@@ -105,6 +105,9 @@ process FILTER_SEGMENTS {
 
     stub:
     def write_cns = meta.analysis_type == 'filtered'
+    // Honour the exclude list, as the script does, so a subcohort that loses every sample
+    // can be exercised without the real tools.
+    def drop_excluded = exclude_samples.name != 'NO_FILE' ? "| { grep -vxFf <(cut -f1 ${exclude_samples}) || true; }" : ''
     """
     mkdir -p cns
     if ${write_cns}; then
@@ -115,6 +118,6 @@ process FILTER_SEGMENTS {
         done
     fi
     echo stub > ${meta.prefix}_${meta.analysis_type}_segments.seg
-    cut -f1 ${include_samples} > ${meta.prefix}_gistic_${meta.analysis_type}_samples.txt
+    cut -f1 ${include_samples} ${drop_excluded} > ${meta.prefix}_gistic_${meta.analysis_type}_samples.txt
     """
 }

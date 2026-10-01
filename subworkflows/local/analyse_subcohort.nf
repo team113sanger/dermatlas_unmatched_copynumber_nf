@@ -50,7 +50,27 @@ workflow ANALYSE_SUBCOHORT {
 
     FILTER_SEGMENTS(filter_input, difficult_regions)
 
-    RUN_GISTIC2(FILTER_SEGMENTS.out.seg, gistic_refgene_file)
+    // A subcohort can reach this point with samples listed and still have none left to
+    // score: a small one (related_tumours, typically) can lose every sample to exclusion or
+    // hypersegmentation. GISTIC2 cannot score an empty .seg file, so such an arm stops here
+    // with a warning - its .seg and sample list are still published - rather than failing
+    // the run for the subcohorts that have samples.
+    scored_samples = FILTER_SEGMENTS.out.samples
+        .filter { meta, samples ->
+            def has_samples = samples.readLines().any { line -> line.trim() }
+            if (!has_samples) {
+                log.warn("Skipping GISTIC2 and penetrance plot for subcohort '${meta.cohort_id}' " +
+                         "(${meta.analysis_type}): no samples left after exclusion and filtering.")
+            }
+            return has_samples
+        }
+
+    RUN_GISTIC2(
+        FILTER_SEGMENTS.out.seg
+            .join(scored_samples)
+            .map { meta, seg, _samples -> tuple(meta, seg) },
+        gistic_refgene_file
+    )
 
     // The sample list FILTER_SEGMENTS wrote is the definitive membership of the .seg file
     // it exported - the subcohort's samples, minus the excluded and hypersegmented ones -
@@ -59,8 +79,11 @@ workflow ANALYSE_SUBCOHORT {
     // Only the filtered arm rewrites its .cns files; the unfiltered arm exported the
     // re-called ones untouched, so `remainder: true` keeps it in the stream with a null
     // where its .cns files would be, and it is plotted from the re-called files instead.
-    segments_to_plot = FILTER_SEGMENTS.out.samples
+    // An arm skipped above has .cns files but no scored samples; the remainder join would
+    // emit it with a null sample list, so it is dropped here.
+    segments_to_plot = scored_samples
         .join(FILTER_SEGMENTS.out.cns, remainder: true)
+        .filter { _meta, samples, _cns -> samples != null }
         .branch { meta, samples, cns ->
             filtered: cns != null
                 return tuple(meta, cns, samples)

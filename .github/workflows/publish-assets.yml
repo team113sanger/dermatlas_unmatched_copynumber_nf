@@ -54,7 +54,8 @@ jobs:
             release_tag="$source_ref"
             prerelease=false
           else
-            # Rolling channel: a fixed tag that is force-moved to the head of the branch.
+            # Rolling channel: a fixed tag, created once and never moved; only the bundle
+            # attached to it is replaced on each push.
             release_tag="$(printf '%s' "$source_ref" | tr '/' '-')-latest"
             prerelease=true
           fi
