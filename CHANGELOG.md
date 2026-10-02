@@ -22,6 +22,11 @@ changelog entry to indicate the impact of the change:
 
 
 
+## [0.2.4]
+
+### Fixed
+- **INTEGRATION** Updated pipeline slug in config to `unmatched_copy_number_pipe`, matching the run script default.
+
 ## [0.2.3]
 
 ### Fixed
