@@ -72,6 +72,12 @@ workflow ANALYSE_SUBCOHORT {
         gistic_refgene_file
     )
 
+    RUN_GISTIC2.out.skipped
+        .subscribe { meta, _skip_log ->
+            log.warn("GISTIC2 skipped for subcohort '${meta.cohort_id}' (${meta.analysis_type}): " +
+                     "only one sample remains after noise filtering.")
+        }
+
     // The sample list FILTER_SEGMENTS wrote is the definitive membership of the .seg file
     // it exported - the subcohort's samples, minus the excluded and hypersegmented ones -
     // so the plot is drawn over exactly the samples GISTIC2 scored.
