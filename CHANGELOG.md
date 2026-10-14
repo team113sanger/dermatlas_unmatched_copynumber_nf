@@ -22,6 +22,11 @@ changelog entry to indicate the impact of the change:
 
 
 
+## [0.2.5]
+
+### Fixed
+- **ROBUSTNESS** GISTIC2 no longer fails the pipeline when only one sample in a subcohort remains after noise filtering; the subcohort is skipped with a warning and a `gistic2_skipped.log` is published.
+
 ## [0.2.4]
 
 ### Fixed
