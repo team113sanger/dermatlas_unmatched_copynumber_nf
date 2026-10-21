@@ -1,6 +1,5 @@
 #!/bin/bash
 #BSUB -q oversubscribed
-#BSUB -G team113-grp
 #BSUB -R "select[mem>8000] rusage[mem=8000] span[hosts=1]"
 #BSUB -M 8000
 
