@@ -22,6 +22,12 @@ changelog entry to indicate the impact of the change:
 
 
 
+## [0.2.6]
+### Changed
+- **INTEGRATION** - Removed the `-G team113-grp` LSF submission option in
+  `assets/run_unmatched_copynumber.sh` so that user space environmental
+  variables can control group selection.
+
 ## [0.2.5]
 
 ### Fixed
